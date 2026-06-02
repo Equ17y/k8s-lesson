@@ -75,3 +75,32 @@ $ docker compose build web
 `ALLOWED_HOSTS` -- настройка Django со списком разрешённых адресов. Если запрос прилетит на другой адрес, то сайт ответит ошибкой 400. Можно перечислить несколько адресов через запятую, например `127.0.0.1,192.168.0.1,site.test`. [Документация Django](https://docs.djangoproject.com/en/3.2/ref/settings/#allowed-hosts).
 
 `DATABASE_URL` -- адрес для подключения к базе данных PostgreSQL. Другие СУБД сайт не поддерживает. [Формат записи](https://github.com/jacobian/dj-database-url#url-schema).
+
+
+## Настройка Kubernetes Secret
+
+Перед деплоем необходимо создать Secret с конфиденциальными данными.
+
+1. Создайте файл `kubernetes/secret.yaml`:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: django-secret
+type: Opaque
+stringData:
+  SECRET_KEY: "ваш-секретный-ключ"
+  DATABASE_URL: "postgres://user:password@host:port/dbname"
+```
+
+2. Примените Secret
+```bash
+kubectl apply -f kubernetes/secret.yaml
+```   
+
+3. Проверка 
+```bash
+kubectl get secret django-secret
+kubectl describe secret django-secret
+``` 

@@ -1,4 +1,21 @@
-# Byte-compiled / optimized / DLL files
+# Kubernetes secrets
+kubernetes/secret.yaml
+
+# Python
 __pycache__/
-*.py[cod]
-*$py.class
+*.pyc
+*.pyo
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.tar
