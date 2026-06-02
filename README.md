@@ -104,3 +104,30 @@ kubectl apply -f kubernetes/secret.yaml
 kubectl get secret django-secret
 kubectl describe secret django-secret
 ``` 
+
+## Доступ к сайту через Ingress
+
+Сайт доступен по доменному имени `star-burger.test`.
+
+### Настройка локального DNS
+
+Добавить запись в файл `hosts`:
+
+**Windows:** 
+`192.168.59.100 star-burger.test`
+
+Файл находится по пути: `C:\Windows\System32\drivers\etc\hosts`
+
+**Linux/Mac:**
+```bash
+echo "$(minikube ip) star-burger.test" | sudo tee -a /etc/hosts
+```
+
+## Проверка
+
+### Узнать IP Minikube
+```bash
+minikube ip
+```
+### Открыть сайт
+http://star-burger.test
