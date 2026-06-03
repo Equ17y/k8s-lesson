@@ -105,7 +105,7 @@ kubectl get secret django-secret
 kubectl describe secret django-secret
 ``` 
 
-## Доступ к сайту через Ingress
+## Доступ к сайту
 
 Сайт доступен по доменному имени `star-burger.test`.
 
@@ -114,7 +114,7 @@ kubectl describe secret django-secret
 Добавить запись в файл `hosts`:
 
 **Windows:** 
-`192.168.59.100 star-burger.test`
+`192.168.49.2 star-burger.test`
 
 Файл находится по пути: `C:\Windows\System32\drivers\etc\hosts`
 
@@ -123,11 +123,42 @@ kubectl describe secret django-secret
 echo "$(minikube ip) star-burger.test" | sudo tee -a /etc/hosts
 ```
 
-## Проверка
+### Запуск сайта
 
-### Узнать IP Minikube
+1. Загрузите образ Django в Minikube:
+```bash
+minikube image load django_app:latest
+```
+
+2. Запустите базу данных (если не запущена):
+```bash
+docker start pg-external
+```
+
+3. Примените манифесты:
+```bash
+kubectl apply -f kubernetes/secret.yaml
+kubectl apply -f kubernetes/django-deployment.yaml
+kubectl apply -f kubernetes/django-service.yaml
+```
+
+4. Получить URL:
+```bash
+minikube service django --url
+```
+
+5. Откройте сайт в браузере по полученному URL или по адресу http://star-burger.test
+
+# Проверка
+
+## Узнать IP Minikube
 ```bash
 minikube ip
+```
+
+## Проверить доступность домена
+```bash
+ping star-burger.test
 ```
 ### Открыть сайт
 http://star-burger.test
