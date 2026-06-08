@@ -160,5 +160,30 @@ minikube ip
 ```bash
 ping star-burger.test
 ```
+
+# Автоматическая очистка сессий (CronJob)
+
+Для автоматической очистки устаревших сессий настроен CronJob, который запускает команду `clearsessions` каждый день в 6:00 утра.
+
+### Манифест
+
+Файл: `kubernetes/django-cronjob.yaml`
+
+### Проверка
+
+```bash
+# Посмотреть CronJob
+kubectl get cronjobs
+
+# Посмотреть Jobs
+kubectl get jobs
+
+# Принудительно запустить очистку сессий
+kubectl create job --from=cronjob/django-clearsessions django-clearsessions-once
+
+# Проверить статус Pod
+kubectl get pods | grep clearsessions
+```
+
 ### Открыть сайт
 http://star-burger.test
