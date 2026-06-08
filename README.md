@@ -161,7 +161,7 @@ minikube ip
 ping star-burger.test
 ```
 
-# Автоматическая очистка сессий (CronJob)
+## Автоматическая очистка сессий (CronJob)
 
 Для автоматической очистки устаревших сессий настроен CronJob, который запускает команду `clearsessions` каждый день в 6:00 утра.
 
@@ -184,6 +184,15 @@ kubectl create job --from=cronjob/django-clearsessions django-clearsessions-once
 # Проверить статус Pod
 kubectl get pods | grep clearsessions
 ```
+
+### Параметры CronJob
+
+В манифесте `kubernetes/django-cronjob.yaml` настроены следующие параметры для надежности и очистки:
+- `startingDeadlineSeconds: 600` — даёт 10 минут на запуск после пропуска (избегает ошибок "Too many missed start time" при долгом простое Minikube).
+- `successfulJobsHistoryLimit: 3` — хранить историю только 3 последних успешных Job.
+- `failedJobsHistoryLimit: 1` — хранить историю только 1 последней неудачной Job.
+- `ttlSecondsAfterFinished: 60` — автоматически удалять завершенные Job и их Pod'ы через 60 секунд после завершения.
+
 
 ### Открыть сайт
 http://star-burger.test
