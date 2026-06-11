@@ -130,24 +130,39 @@ echo "$(minikube ip) star-burger.test" | sudo tee -a /etc/hosts
 minikube image load django_app:latest
 ```
 
-2. Запустите базу данных (если не запущена):
+2. Установка PostgreSQL через Helm (если ещё не установлена)
+
 ```bash
-docker start pg-external
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+
+
+helm install postgresql bitnami/postgresql \
+  --set auth.username=test_k8s \
+  --set auth.password=OwOtBep9Frut \
+  --set auth.database=test_k8s \
+  --set primary.persistence.enabled=false
 ```
 
-3. Примените манифесты:
+3. Применение миграций
+```bash
+kubectl apply -f kubernetes/django-migrate.yaml
+kubectl logs job/django-migrate
+```
+
+4. Примените манифесты:
 ```bash
 kubectl apply -f kubernetes/secret.yaml
 kubectl apply -f kubernetes/django-deployment.yaml
 kubectl apply -f kubernetes/django-service.yaml
 ```
 
-4. Получить URL:
+5. Получить URL:
 ```bash
 minikube service django --url
 ```
 
-5. Откройте сайт в браузере по полученному URL или по адресу http://star-burger.test
+6. Откройте сайт в браузере по полученному URL или по адресу http://star-burger.test
 
 # Проверка
 
