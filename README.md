@@ -193,6 +193,26 @@ kubectl get pods | grep clearsessions
 - `failedJobsHistoryLimit: 1` — хранить историю только 1 последней неудачной Job.
 - `ttlSecondsAfterFinished: 60` — автоматически удалять завершенные Job и их Pod'ы через 60 секунд после завершения.
 
+## Запуск миграций базы данных (Job)
+
+При каждом обновлении кода необходимо применять миграции Django. Для этого создана разовая задача (Job).
+
+### Манифест
+Файл: `kubernetes/django-migrate.yaml`
+
+### Как запустить
+1. Убедитесь, что новый образ загружен в Minikube:
+```bash
+minikube image load django_app:latest
+```
+2. Запустите Job:
+```bash
+kubectl apply -f kubernetes/django-migrate.yaml
+```
+3. Проверка успешного выполнения:
+```bash
+kubectl logs job/django-migrate
+```
 
 ### Открыть сайт
 http://star-burger.test

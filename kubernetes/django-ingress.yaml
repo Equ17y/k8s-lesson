@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: django
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"  # ← Отключаем редирект на HTTPS
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
     - host: star-burger.test
